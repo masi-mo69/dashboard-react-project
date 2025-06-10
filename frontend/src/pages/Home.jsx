@@ -8,10 +8,18 @@ import DomainLinks from "../components/DomainSearch/DomainLink";
 
 const HomePage = () => {
   const [plan, setPlan] = useState(null);
+  const [user, setUser] = useState(null);
+
+  /* دریافت اطلاعات کاربر */
+  useEffect(() => {
+    axios.get("http://localhost:3001/users/2")
+      .then(res => setUser(res.data))
+      .catch(err => console.error("خطا در دریافت اطلاعات کاربر:", err));
+  }, []);
 
   useEffect(() => {
     axios
-      .get("https://6846aa507dbda7ee7aafddfa.mockapi.io/api/plans/plans")
+      .get("http://localhost:3001/plans")
       .then((res) => {
         const firstPlan = res.data[0]; // فقط اولین پلن
         setPlan(firstPlan);
@@ -24,7 +32,7 @@ const HomePage = () => {
     <div className="p-6 bg-[#f4f5ff] min-h-screen">
       {/* Welcome Text */}
       <h1 className="text-2xl font-bold text-[#1d1e20] mb-6">
-        Hello, masi!
+        Hello, {user?.username || "Guest"}!
       </h1>
 
       {/* Section 1: Website Builder Promo */}

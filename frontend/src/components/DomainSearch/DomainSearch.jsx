@@ -13,7 +13,7 @@ const DomainSearch = () => {
 
     try {
       const res = await axios.get(
-        `https://6846aa507dbda7ee7aafddfa.mockapi.io/api/plans/domains`
+        `http://localhost:3001/domains`
       );
 
       const matched = res.data.find(

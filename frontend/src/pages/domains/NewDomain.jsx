@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import DomainSearch from "../../components/DomainSearch/DomainSearch";
 
 export default function NewDomain() {
   const [activeTab, setActiveTab] = useState("find");
@@ -58,18 +59,7 @@ export default function NewDomain() {
             <p className="text-gray-600 mb-4 text-center">
               Type your desired domain name into the domain checker search bar and find out if it’s available instantly!
             </p>
-            <div className="flex justify-center items-center gap-2 mb-8 max-w-lg mx-auto">
-              <input
-                type="text"
-                value={domain}
-                onChange={(e) => setDomain(e.target.value)}
-                placeholder="Enter your desired domain name"
-                className="flex-1 border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-purple-600"
-              />
-              <button className="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-500 transition">
-                Search
-              </button>
-            </div>
+            <DomainSearch />
 
             <div className="flex flex-wrap justify-center gap-6">
               {[

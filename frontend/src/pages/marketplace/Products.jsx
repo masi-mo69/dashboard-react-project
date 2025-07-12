@@ -1,114 +1,99 @@
 import React from "react";
-import { FaSearch, FaStar, FaGoogle, FaWordpress, FaShieldAlt, FaEnvelope, FaExchangeAlt } from "react-icons/fa";
+import { FaSearch, FaCloud, FaGamepad, FaServer, FaGlobe } from "react-icons/fa";
 
-const ProductsMarket = () => {
-  const recommendedProducts = [
+const AllProducts = () => {
+  const products = [
     {
-      title: "No-Code Website Builder",
-      icon: <FaStar className="text-yellow-400" />
+      title: "Web Hosting",
+      discount: "Save 80%",
+      description: "Host and manage small and medium size websites on the same server using our web hosting solution",
+      icon: <FaServer className="text-blue-500 text-xl" />
     },
     {
-      title: "Malware Scanner",
-      icon: <FaShieldAlt className="text-blue-500" />
+      title: "Cloud Hosting",
+      discount: "Save 70%",
+      description: "Safe and trustworthy, our cloud hosting is an ideal choice for large-scale websites or other projects",
+      icon: <FaCloud className="text-blue-400 text-xl" />
     },
     {
-      title: "Email Account",
-      icon: <FaEnvelope className="text-red-500" />
+      title: "VPS Hosting",
+      discount: "Save 70%",
+      description: "Take full control over your server. Our virtual private servers offer great power, flexibility, and speed.",
+      icon: <FaServer className="text-purple-500 text-xl" />
     },
     {
-      title: "Free Automatic Website Migration",
-      icon: <FaExchangeAlt className="text-green-500" />
+      title: "Game Panel Hosting",
+      discount: "Save 70%",
+      description: "Game server solutions with scalable resources and global server locations for an unbeatable gaming experience.",
+      icon: <FaGamepad className="text-green-500 text-xl" />
     },
     {
-      title: "Unlimited Free SSL",
-      icon: <FaShieldAlt className="text-purple-500" />
+      title: "Register domain",
+      discount: "",
+      description: "Find the perfect domain name. Choose from more than 200 extensions.",
+      icon: <FaGlobe className="text-orange-500 text-xl" />
     }
   ];
 
   return (
-    <div className="max-w-6xl mx-auto p-6">
-      {/* بخش Recommended for you */}
-      <div className="mb-10">
-        <h3 className="text-lg font-medium text-gray-700 mb-4">Recommended for you</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-          {recommendedProducts.map((product, index) => (
-            <div key={index} className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
-              <div className="text-2xl mb-2">{product.icon}</div>
-              <h4 className="font-medium text-gray-800">{product.title}</h4>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* بخش Web Hosting */}
-      <div className="mb-10">
-        <div className="flex justify-between items-center mb-4">
-          <h3 className="text-lg font-medium text-gray-700">Web Hosting</h3>
-          <span className="bg-red-100 text-red-800 text-xs font-medium px-2 py-1 rounded">SAVE 86%</span>
-        </div>
-        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-          <div className="flex items-center gap-2 mb-3">
-            <FaGoogle className="text-blue-500 text-xl" />
-            <span className="font-medium">Google</span>
-          </div>
-          <div className="flex items-end gap-2 mb-4">
-            <span className="text-2xl font-bold">$1.49</span>
-            <span className="text-gray-500">/mo</span>
-          </div>
-          <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-md transition-colors">
-            Get Now
-          </button>
-        </div>
-      </div>
-
-      {/* بخش Explorer plans */}
-      <div className="mb-10">
-        <h3 className="text-lg font-medium text-gray-700 mb-1">Explorer plans</h3>
-        <p className="text-gray-500 text-sm mb-4">Plan reviews at £730/month</p>
-        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-          <ul className="space-y-2 text-gray-700">
-            <li className="flex items-center gap-2">
-              <FaWordpress className="text-blue-500" />
-              <span>Unmetered traffic</span>
-            </li>
-            <li className="flex items-center gap-2">
-              <FaWordpress className="text-blue-500" />
-              <span>Weekly Backups</span>
-            </li>
-            <li className="flex items-center gap-2">
-              <FaWordpress className="text-blue-500" />
-              <span>50 GB SSD Storage</span>
-            </li>
-            <li className="flex items-center gap-2">
-              <FaWordpress className="text-blue-500" />
-              <span>Managed WordPress</span>
-            </li>
-            <li className="flex items-center gap-2">
-              <FaWordpress className="text-blue-500" />
-              <span>24/7 Customer Support</span>
-            </li>
-          </ul>
-        </div>
-      </div>
-
-      {/* بخش All products */}
-      <div>
-        <h3 className="text-lg font-medium text-gray-700 mb-4">All products</h3>
-        <div className="relative mb-4">
+    <div className="max-w-4xl mx-auto p-6">
+      {/* بخش جستجو */}
+      <div className="mb-8">
+        <div className="relative">
           <input
             type="text"
-            placeholder="Search"
-            className="w-full p-2 pl-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Type here to search"
+            className="w-full p-3 pl-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
-          <FaSearch className="absolute left-3 top-3 text-gray-400" />
+          <FaSearch className="absolute left-3 top-4 text-gray-400" />
         </div>
-        <div className="flex items-center gap-2 text-sm mb-2">
-          <span className="font-medium">Web Hosting</span>
-          <span className="bg-green-100 text-green-800 px-2 py-1 rounded">Save 80%</span>
+      </div>
+
+      {/* لیست محصولات */}
+      <div className="space-y-6 mb-8">
+        {products.map((product, index) => (
+          <div key={index} className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
+            <div className="flex items-start gap-4">
+              <div className="mt-1">
+                {product.icon}
+              </div>
+              <div className="flex-1">
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="text-lg font-bold text-gray-800">{product.title}</h3>
+                  {product.discount && (
+                    <span className="bg-green-100 text-green-800 text-xs font-medium px-2 py-1 rounded">
+                      {product.discount}
+                    </span>
+                  )}
+                </div>
+                <p className="text-gray-600 mb-4">{product.description}</p>
+                <button className="text-blue-600 hover:text-blue-800 font-medium">
+                  Explore
+                </button>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* بخش Refer & earn */}
+      <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6 text-center">
+        <p className="font-medium text-yellow-800">Refer & earn up to 450 USD</p>
+      </div>
+
+      {/* پاورقی */}
+      <div className="flex flex-col md:flex-row justify-between items-center text-sm text-gray-500">
+        <div className="mb-4 md:mb-0">
+          <span>Items per page: 5 → 1 - 5 of 22</span>
+        </div>
+        <div className="flex items-center gap-4">
+          <span>25°C Sunny</span>
+          <span>7:51 AM</span>
+          <span>7/11/2025</span>
         </div>
       </div>
     </div>
   );
 };
 
-export default ProductsMarket;
+export default AllProducts;

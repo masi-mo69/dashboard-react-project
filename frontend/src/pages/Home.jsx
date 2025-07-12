@@ -1,45 +1,54 @@
 // src/pages/HomePage/HomePage.js
-import React, {useState , useEffect} from "react";
-import axios from "axios";
+import React, { useState, useEffect } from "react";
+import useClient from "../hooks/useClient";
 
 import DomainSearch from "../components/DomainSearch/DomainSearch";
 import HomeHosting from "../assets/images/HomeHostingCrossSell.png";
 import DomainLinks from "../components/DomainSearch/DomainLink";
 
 const HomePage = () => {
-  const [plan, setPlan] = useState(null);
-  const [user, setUser] = useState(null);
+  const { user, loading, error } = useClient(1);
 
-  /* دریافت اطلاعات کاربر */
-  useEffect(() => {
-    axios.get("http://localhost:3001/users/2")
-      .then(res => setUser(res.data))
-      .catch(err => console.error("خطا در دریافت اطلاعات کاربر:", err));
-  }, []);
+  // تعریف استاتیک پلن‌ها
+  const plans = [
+    {
+      id: 1,
+      title: "Single Web Hosting",
+      description: "Our savory-inspired Chair brings a taste of luxury to your front lifestyle",
+      originalPrice: 5.99,
+      discountPercent: 70,
+      price: 1.79,
+    },
+    {
+      id: 2,
+      title: "Premium Web Hosting",
+      description: "Our savory-inspired Chair brings a taste of luxury to your front lifestyle",
+      originalPrice: 8.99,
+      discountPercent: 75,
+      price: 2.25,
+    },
+    // پلن‌های دیگر در صورت نیاز...
+  ];
 
-  useEffect(() => {
-    axios
-      .get("http://localhost:3001/plans")
-      .then((res) => {
-        const firstPlan = res.data[0]; // فقط اولین پلن
-        setPlan(firstPlan);
-      })
-      .catch((err) => console.error("خطا در گرفتن پلن:", err));
-  }, []);
+  // چون فقط اولین پلن رو لازم داری:
+  const plan = plans[0];
 
-  
   return (
     <div className="p-6 bg-[#f4f5ff] min-h-screen">
       {/* Welcome Text */}
-      <h1 className="text-2xl font-bold text-[#1d1e20] mb-6">
-        Hello, {user?.username || "Guest"}!
-      </h1>
+      {loading ? (
+        <p className="text-gray-500 mb-6">Loading user...</p>
+      ) : error ? (
+        <p className="text-red-500 mb-6">Failed to load user data</p>
+      ) : (
+        <h1 className="text-2xl font-bold text-[#1d1e20] mb-6">
+          Hello, {user?.firstname || "Guest"}!
+        </h1>
+      )}
 
       {/* Section 1: Website Builder Promo */}
       {plan && (
-        <div
-          className="bg-white p-8 rounded-lg shadow-md mb-8 flex flex-col justify-between md:flex-row items-center"
-        >
+        <div className="bg-white p-8 rounded-lg shadow-md mb-8 flex flex-col justify-between md:flex-row items-center">
           <img
             src={HomeHosting}
             alt={plan.title}
@@ -49,9 +58,7 @@ const HomePage = () => {
             <h2 className="text-xl font-bold text-[#1d1e20] mb-2">{plan.title}</h2>
             <p className="text-gray-600 mb-4">{plan.description}</p>
             <div className="flex items-center gap-3 mb-4 justify-center">
-              <span className="line-through text-gray-400">
-                £{plan.originalPrice}
-              </span>
+              <span className="line-through text-gray-400">£{plan.originalPrice}</span>
               <span className="bg-pink-200 text-pink-700 px-2 py-1 rounded text-xs font-bold">
                 SAVE {plan.discountPercent}%
               </span>
@@ -65,18 +72,16 @@ const HomePage = () => {
           </div>
         </div>
       )}
-        
-
 
       {/* Section 2: Start with a domain */}
-      <div className="bg-white p-8 rounded-lg shadow-md mb-8  justify-between md:flex-row items-center">
-       <h2 className="text-xl font-bold text-[#1d1e20] mb-2">
-            Website Builder & Web Hosting
-          </h2>
-          <p className="text-gray-600 mb-4">
-            Get your Web Hosting plan and build your website quickly
-          </p>
-        <DomainSearch /> 
+      <div className="bg-white p-8 rounded-lg shadow-md mb-8 justify-between md:flex-row items-center">
+        <h2 className="text-xl font-bold text-[#1d1e20] mb-2">
+          Website Builder & Web Hosting
+        </h2>
+        <p className="text-gray-600 mb-4">
+          Get your Web Hosting plan and build your website quickly
+        </p>
+        <DomainSearch />
         <DomainLinks />
       </div>
     </div>

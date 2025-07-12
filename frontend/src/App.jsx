@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout";
 
 import Home from "./pages/Home";
+import HostingerAccountPanel from "./pages/Profile";
 import Websites from "./pages/Websites";
 import Domains from "./pages/Domains";
 import DomainPortfolio from "./pages/Domains/DomainPortfolio";
@@ -31,6 +32,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
+          <Route path="/profile" element={<HostingerAccountPanel />} />
           <Route path="websites" element={<Websites />} />
           <Route path="domains" element={<Domains />}>
             <Route path="portfolio" element={<DomainPortfolio />} />

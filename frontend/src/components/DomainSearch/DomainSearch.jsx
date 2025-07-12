@@ -5,35 +5,40 @@ import axios from "axios";
 const DomainSearch = () => {
   const [domain, setDomain] = useState("");
   const [isFocused, setIsFocused] = useState(false);
-  const [results, setResults] = useState([]);
   const [status, setStatus] = useState(null);
 
   const handleSearch = async (e) => {
-    e.preventDefault(); // جلوگیری از رفرش شدن صفحه
+  e.preventDefault();
 
-    try {
-      const res = await axios.get(
-        `http://localhost:3001/domains`
-      );
+  if (!domain.trim()) {
+    setStatus("❗ لطفاً یک دامنه وارد کنید");
+    return;
+  }
 
-      const matched = res.data.find(
-        (item) => item.domain.toLowerCase() === domain.toLowerCase()
-      );
+  console.log("Testing domain:", domain);
 
-      if (matched) {
-        if (matched.available) {
-          setStatus("✅ دامنه آزاد است");
-        } else {
-          setStatus("❌ دامنه قبلاً ثبت شده");
-        }
-      } else {
-        setStatus("❓ دامنه در لیست یافت نشد");
-      }
-    } catch (err) {
-      console.error("خطا در جستجوی دامنه:", err);
-      setStatus("❌ خطا در جستجو");
+  try {
+    const res = await axios.get(
+      `https://daroomokamel.ir/whmcs_api_wraper/public/api/whmcs/domain/check?domain=${domain}`
+    );
+
+    console.log("API response:", res.data);
+
+    const { status } = res.data.availability;
+
+    if (status === "available") {
+      setStatus(`✅ دامنه آزاد است: ${domain}`);
+    } else if (status === "unavailable") {
+      setStatus(`❌ دامنه قبلاً ثبت شده: ${domain}`);
+    } else {
+      setStatus(`❓ وضعیت دامنه مشخص نیست: ${domain}`);
     }
-  };
+  } catch (err) {
+    console.error("خطا در جستجوی دامنه:", err);
+    setStatus(`❌ خطا در جستجو: ${domain}`);
+  }
+};
+
 
   return (
     <div className="mx-auto py-3">
@@ -76,9 +81,8 @@ const DomainSearch = () => {
         </div>
       </form>
 
-      {/* نتیجه */}
       {status && (
-        <p className="mt-4 text-lg font-medium text-gray-700">{status}</p>
+        <pre className="mt-4 text-gray-700 whitespace-pre-wrap">{status}</pre>
       )}
     </div>
   );

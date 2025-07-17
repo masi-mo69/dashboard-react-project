@@ -42,6 +42,7 @@
 
 
 git clone https://github.com/masi-mo69/dashboard-react-project.git
+
 cd dashboard-react-project
 
     نصب dependencies:

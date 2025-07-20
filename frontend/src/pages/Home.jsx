@@ -1,15 +1,16 @@
-// src/pages/HomePage/HomePage.js
-import React, { useState, useEffect } from "react";
+import React from "react";
 import useClient from "../hooks/useClient";
+import { useNavigate } from "react-router-dom";
+import FancyLoader from "../components/Loader/FancyLoader"; // ← اضافه کن
 
 import DomainSearch from "../components/DomainSearch/DomainSearch";
 import HomeHosting from "../assets/images/HomeHostingCrossSell.png";
 import DomainLinks from "../components/DomainSearch/DomainLink";
 
 const HomePage = () => {
-  const { user, loading, error } = useClient(1);
+  const { user, error } = useClient(1);
+  const navigate = useNavigate();
 
-  // تعریف استاتیک پلن‌ها
   const plans = [
     {
       id: 1,
@@ -27,24 +28,30 @@ const HomePage = () => {
       discountPercent: 75,
       price: 2.25,
     },
-    // پلن‌های دیگر در صورت نیاز...
   ];
 
-  // چون فقط اولین پلن رو لازم داری:
   const plan = plans[0];
+
+  /* نمایش لودر در حین دریافت کاربر
+  if (!user && !error) {
+    return (
+      <div className="relative min-h-[300px] bg-[#f4f5ff]">
+        <div className="absolute inset-0 z-50 flex items-center justify-center bg-white/80">
+          <FancyLoader />
+        </div>
+      </div>
+    );
+  } */
 
   return (
     <div className="p-6 bg-[#f4f5ff] min-h-screen">
-      {/* Welcome Text */}
-      {loading ? (
-        <p className="text-gray-500 mb-6">Loading user...</p>
-      ) : error ? (
+      {error && (
         <p className="text-red-500 mb-6">Failed to load user data</p>
-      ) : (
-        <h1 className="text-2xl font-bold text-[#1d1e20] mb-6">
-          Hello, {user?.firstname || "Guest"}!
-        </h1>
       )}
+
+      <h1 className="text-2xl font-bold text-[#1d1e20] mb-6">
+        Hello, {user?.firstname || "Guest"}!
+      </h1>
 
       {/* Section 1: Website Builder Promo */}
       {plan && (
@@ -66,7 +73,10 @@ const HomePage = () => {
             <div className="text-3xl font-bold text-[#1d1e20] mb-4">
               £{plan.price}/mo
             </div>
-            <button className="bg-purple-600 hover:bg-purple-500 text-white px-6 py-2 rounded-lg transition">
+            <button
+              onClick={() => navigate("/websites")}
+              className="bg-purple-600 hover:bg-purple-500 text-white px-6 py-2 rounded-lg transition"
+            >
               Explore plans
             </button>
           </div>

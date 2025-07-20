@@ -6,14 +6,14 @@ const DomainLinks = () => {
     <p className="mt-4 text-gray-700 text-right text-sm">
       Already have a domain?{" "}
       <Link 
-        to="/transfer-domain" 
+        to="/domains/transfers" 
         className="text-[#673de6] font-bold hover:underline"
       >
         Transfer it to Hostinger
       </Link>{" "}
       or{" "}
       <Link 
-        href="/buy_hosting" 
+        to="/websites" 
         className="text-[#673de6] font-bold hover:underline"
       >
         get a hosting plan

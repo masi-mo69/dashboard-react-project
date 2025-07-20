@@ -1,20 +1,30 @@
 import React, { useState } from "react";
 import DomainSearch from "../../components/DomainSearch/DomainSearch";
+import DomainPricing from "../../components/DomainSearch/DomainPricing";
+import DomainAvailableCard from "../../components/DomainSearch/DomainAvailableCard";
 
 export default function NewDomain() {
   const [activeTab, setActiveTab] = useState("find");
-  const [domain, setDomain] = useState("");
   const [description, setDescription] = useState("");
   const [error, setError] = useState("");
+
+  const [domainAvailable, setDomainAvailable] = useState(false);
+  const [availableDomain, setAvailableDomain] = useState("");
 
   const handleGenerate = () => {
     if (!description.trim()) {
       setError("Fill in this field");
     } else {
       setError("");
-      // اینجا کد فراخوانی API یا عملیات تولید دامین
       console.log("Generate domains using AI for:", description);
+      // فراخوانی API تولید دامنه با هوش مصنوعی
     }
+  };
+
+  // تابعی که وقتی نتیجه چک دامنه آمد، صدا زده می‌شود
+  const handleDomainCheckResult = (domain, available) => {
+    setAvailableDomain(domain);
+    setDomainAvailable(available);
   };
 
   return (
@@ -25,10 +35,11 @@ export default function NewDomain() {
         </h1>
 
         {/* Tabs */}
-        <div className="flex justify-center gap-2 mb-6">
+        <div className="flex flex-col sm:flex-row justify-center gap-4 mb-6">
           <button
             onClick={() => setActiveTab("find")}
-            className={`flex items-center gap-2 px-4 py-2 rounded 
+            className={`flex items-center gap-2 px-6 py-2 rounded-full pl-[50px] sm:ml-[-50px]
+              justify-center sm:justify-start
               ${activeTab === "find" 
                 ? "bg-purple-600 text-white" 
                 : "border border-purple-600 text-purple-600 hover:bg-purple-50"} transition`}
@@ -37,17 +48,13 @@ export default function NewDomain() {
           </button>
           <button
             onClick={() => setActiveTab("ai")}
-            className={`flex items-center gap-2 px-4 py-2 rounded 
+            className={`flex items-center gap-2 px-6 py-2 rounded-full pr-[50px]
+              justify-center sm:justify-start
               ${activeTab === "ai" 
                 ? "bg-purple-600 text-white" 
                 : "border border-purple-600 text-purple-600 hover:bg-purple-50"} transition`}
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              aria-hidden="true"
-              viewBox="0 0 24 24"
-              className="w-5 h-5"
-            >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-5 h-5">
               <path d="M18.3 8.1251L17.225 5.6251L14.625 4.4751L17.225 3.3501L18.3 0.975098L19.375 3.3501L21.975 4.4751L19.375 5.6251L18.3 8.1251ZM18.3 23.0001L17.225 20.6001L14.625 19.4751L17.225 18.3501L18.3 15.8251L19.375 18.3501L21.975 19.4751L19.375 20.6001L18.3 23.0001ZM7.325 19.1501L5.025 14.2251L0 11.9751L5.025 9.7251L7.325 4.8251L9.65 9.7251L14.65 11.9751L9.65 14.2251L7.325 19.1501Z"></path>
             </svg>
             Generate domain using AI
@@ -59,23 +66,11 @@ export default function NewDomain() {
             <p className="text-gray-600 mb-4 text-center">
               Type your desired domain name into the domain checker search bar and find out if it’s available instantly!
             </p>
-            <DomainSearch />
+            <DomainSearch onCheckResult={handleDomainCheckResult} />
+            <DomainPricing />
 
-            <div className="flex flex-wrap justify-center gap-6">
-              {[
-                { tld: ".com", price: "£4.99" },
-                { tld: ".net", price: "£9.99" },
-                { tld: ".io", price: "£25.99" },
-                { tld: ".org", price: "£6.99" },
-                { tld: ".online", price: "£1.99" },
-                { tld: ".shop", price: "£0.99" },
-              ].map(({ tld, price }) => (
-                <div key={tld} className="text-center">
-                  <strong className="text-purple-600 text-lg">{tld}</strong>
-                  <p className="text-gray-600">{price}</p>
-                </div>
-              ))}
-            </div>
+            {/* نمایش کارت دامنه آزاد */}
+            {domainAvailable && <DomainAvailableCard domain={availableDomain} />}
           </>
         )}
 
@@ -94,7 +89,7 @@ export default function NewDomain() {
                 }`}
               ></textarea>
               {error && (
-                <p className="text-red-500 text-sm mt-1">Fill in this field</p>
+                <p className="text-red-500 text-sm mt-1">{error}</p>
               )}
             </div>
             <div className="flex justify-center">
@@ -102,12 +97,7 @@ export default function NewDomain() {
                 onClick={handleGenerate}
                 className="flex items-center gap-2 bg-purple-600 text-white px-6 py-2 rounded hover:bg-purple-500 transition"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  aria-hidden="true"
-                  viewBox="0 0 24 24"
-                  className="w-5 h-5"
-                >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-5 h-5">
                   <path d="M18.3 8.1251L17.225 5.6251L14.625 4.4751L17.225 3.3501L18.3 0.975098L19.375 3.3501L21.975 4.4751L19.375 5.6251L18.3 8.1251ZM18.3 23.0001L17.225 20.6001L14.625 19.4751L17.225 18.3501L18.3 15.8251L19.375 18.3501L21.975 19.4751L19.375 20.6001L18.3 23.0001ZM7.325 19.1501L5.025 14.2251L0 11.9751L5.025 9.7251L7.325 4.8251L9.65 9.7251L14.65 11.9751L9.65 14.2251L7.325 19.1501Z"></path>
                 </svg>
                 Generate
@@ -115,6 +105,7 @@ export default function NewDomain() {
             </div>
           </>
         )}
+
       </div>
     </div>
   );

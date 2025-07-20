@@ -1,43 +1,71 @@
 import React, { useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import axios from "axios";
+import { useNavigate, useLocation } from "react-router-dom";
 
-const DomainSearch = () => {
+const DomainSearch = ({ onCheckResult }) => {
   const [domain, setDomain] = useState("");
   const [isFocused, setIsFocused] = useState(false);
   const [status, setStatus] = useState(null);
 
+  const navigate = useNavigate();
+  const location = useLocation();
+  const isHome = location.pathname === "/";
+
   const handleSearch = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  if (!domain.trim()) {
-    setStatus("❗ لطفاً یک دامنه وارد کنید");
-    return;
-  }
+    const isDomainEmpty = !domain.trim();
+    const domainRegex = /^[a-zA-Z0-9-]+\.[a-zA-Z]{2,}$/;
 
-  console.log("Testing domain:", domain);
-
-  try {
-    const res = await axios.get(
-      `https://daroomokamel.ir/whmcs_api_wraper/public/api/whmcs/domain/check?domain=${domain}`
-    );
-
-    console.log("API response:", res.data);
-
-    const { status } = res.data.availability;
-
-    if (status === "available") {
-      setStatus(`✅ دامنه آزاد است: ${domain}`);
-    } else if (status === "unavailable") {
-      setStatus(`❌ دامنه قبلاً ثبت شده: ${domain}`);
-    } else {
-      setStatus(`❓ وضعیت دامنه مشخص نیست: ${domain}`);
+    if (isHome) {
+      navigate("/domains/new");
+      return;
     }
-  } catch (err) {
-    console.error("خطا در جستجوی دامنه:", err);
-    setStatus(`❌ خطا در جستجو: ${domain}`);
-  }
-};
+
+    if (isDomainEmpty) {
+      setStatus("❗ لطفاً یک دامنه وارد کنید");
+      if(onCheckResult) onCheckResult("", false);  // اگر خواستی، نتیجه را خالی ارسال کن
+      return;
+    }
+
+    if (!domainRegex.test(domain)) {
+      setStatus("❗ فرمت دامنه صحیح نیست. مثال: example.com");
+      if(onCheckResult) onCheckResult("", false);
+      return;
+    }
+
+    try {
+      const res = await axios.get(
+        `https://daroomokamel.ir/whmcs_api_wraper/public/api/whmcs/domain/check?domain=${domain}`
+      );
+
+      const availability = res?.data?.availability;
+
+      if (!availability || !availability.status) {
+        setStatus("❗ پاسخ نامعتبر از سرور دریافت شد");
+        if(onCheckResult) onCheckResult("", false);
+        return;
+      }
+
+      const status = availability.status;
+
+      if (status === "available") {
+        setStatus(`✅ دامنه آزاد است: ${domain}`);
+        if(onCheckResult) onCheckResult(domain, true);  // اطلاع والد که دامنه آزاد است
+      } else if (status === "unavailable") {
+        setStatus(`❌ دامنه قبلاً ثبت شده: ${domain}`);
+        if(onCheckResult) onCheckResult(domain, false);  // اطلاع والد که آزاد نیست
+      } else {
+        setStatus(`❓ وضعیت دامنه مشخص نیست: ${domain}`);
+        if(onCheckResult) onCheckResult(domain, false);
+      }
+    } catch (err) {
+      console.error("❌ خطا در جستجوی دامنه:", err);
+      setStatus(`❌ خطا در جستجو: ${domain}`);
+      if(onCheckResult) onCheckResult(domain, false);
+    }
+  };
 
 
   return (

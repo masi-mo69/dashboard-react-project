@@ -28,7 +28,7 @@ import Other from "./pages/marketplace/Other";
 
 const App = () => {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/whmcs_api_wraper/public/app">
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
